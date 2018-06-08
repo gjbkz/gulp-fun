@@ -1,20 +1,17 @@
 const path = require('path');
-const test = require('@nlib/test');
+const t = require('tap');
 const Logger = require('../-logger');
 const vfs = require('vinyl-fs');
 const {StartingGate} = require('@nlib/stream-tap');
 const {sequential} = require('../..');
 
-test('sequential', (test) => {
-	test('work with StartingGate', (test) => {
+t.test('sequential', (t) => {
 
+	t.test('work with StartingGate', (t) => {
 		const called = [];
 		const logger = new Logger();
-
 		return new Promise((resolve, reject) => {
-
 			const gate = new StartingGate();
-
 			vfs.src('test/src/*.txt')
 			.once('error', reject)
 			.pipe(gate.put())
@@ -31,22 +28,20 @@ test('sequential', (test) => {
 			.pipe(logger)
 			.once('error', reject)
 			.once('finish', resolve);
-
 		})
 		.then(() => {
-
-			test('called', (test) => {
-				test.compare(
+			t.test('called', (t) => {
+				t.deepEqual(
 					called.map((file) => path.basename(file.path)),
 					[
 						'baz.txt',
 						'foo.txt',
 					]
 				);
+				t.end();
 			});
-
-			test('files', (test) => {
-				test.compare(
+			t.test('files', (t) => {
+				t.deepEqual(
 					logger.written.map((file) => path.basename(file.path)),
 					[
 						'baz.txt',
@@ -55,14 +50,14 @@ test('sequential', (test) => {
 						'foo.txt',
 					]
 				);
+				t.end();
 			});
-
 		});
 	});
 
-	test('emit an error if a promise is rejected', (test) => {
+	t.test('emit an error if a promise is rejected', (t) => {
 
-		test('sync', () => new Promise((resolve, reject) => {
+		t.test('sync', () => new Promise((resolve, reject) => {
 			vfs.src('test/src/*.txt')
 			.pipe(sequential((file, stream) => {
 				stream.push(file);
@@ -72,7 +67,7 @@ test('sequential', (test) => {
 			.once('end', () => reject(new Error('ended unexpectedly')));
 		}));
 
-		test('async', () => new Promise((resolve, reject) => {
+		t.test('async', () => new Promise((resolve, reject) => {
 			vfs.src('test/src/*.txt')
 			.pipe(sequential((file, stream) => {
 				stream.push(file);
@@ -82,5 +77,10 @@ test('sequential', (test) => {
 			.once('end', () => reject(new Error('ended unexpectedly')));
 		}));
 
+		t.end();
+
 	});
+
+	t.end();
+
 });

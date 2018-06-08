@@ -1,2 +1,2 @@
-require('./-sequential');
-require('./-parallel');
+require('./-parallel/index.js');
+require('./-sequential/index.js');
