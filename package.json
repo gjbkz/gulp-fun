@@ -20,7 +20,7 @@
 	"devDependencies": {
 		"@nlib/lint": "^3.0.3",
 		"@nlib/stream-tap": "^1.1.1",
-		"eslint": "^4.19.1",
+		"eslint": "^5.0.0",
 		"tap": "^12.0.1",
 		"vinyl-fs": "^3.0.3"
 	},
