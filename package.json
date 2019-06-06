@@ -28,7 +28,7 @@
         "@commitlint/cli": "8.0.0",
         "@commitlint/config-conventional": "8.0.0",
         "@nlib/lint": "3.10.0",
-        "@types/node": "12.0.5",
+        "@types/node": "12.0.7",
         "@types/vinyl": "2.0.3",
         "@types/vinyl-fs": "2.4.11",
         "@typescript-eslint/eslint-plugin": "1.9.0",
