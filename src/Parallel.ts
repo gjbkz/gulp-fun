@@ -1,15 +1,17 @@
-const {Transform} = require('stream');
-exports.Parallel = class Parallel extends Transform {
+import * as stream from 'stream';
+import {Handler, File} from './types';
 
-    constructor(fn) {
-        const promises = [];
+export class Parallel extends stream.Transform {
+
+    public constructor(fn: Handler) {
+        const promises: Array<Promise<Error | void>> = [];
         super({
             objectMode: true,
-            transform(file, encoding, callback) {
+            transform(file: File, _encoding, callback) {
                 promises.push(
                     Promise.resolve()
                     .then(() => fn(file, this))
-                    .then(() => null)
+                    .then(() => {})
                     .catch((error) => error)
                 );
                 callback();
@@ -29,4 +31,6 @@ exports.Parallel = class Parallel extends Transform {
         });
     }
 
-};
+}
+
+export const parallel = (fn: Handler) => new Parallel(fn);
