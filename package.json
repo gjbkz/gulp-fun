@@ -16,7 +16,7 @@
     "scripts": {
         "lint": "eslint src/**/*.ts",
         "build": "tsc",
-        "test": "ava"
+        "test": "ava -v"
     },
     "devDependencies": {
         "@commitlint/cli": "^8.0.0",

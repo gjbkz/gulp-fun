@@ -18,7 +18,7 @@ test('load files', async (t) => {
         })
         .pipe(parallel(async (file, stream) => {
             called.push(file.path);
-            const duration = 50 * (files.length - files.indexOf(file.path));
+            const duration = 20 * (files.length - files.indexOf(file.path));
             await new Promise((resolve) => setTimeout(resolve, duration));
             stream.push(file);
         }))
