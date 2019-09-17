@@ -26,7 +26,7 @@
     },
     "devDependencies": {
         "@commitlint/cli": "8.2.0",
-        "@commitlint/config-conventional": "8.1.0",
+        "@commitlint/config-conventional": "8.2.0",
         "@nlib/lint": "^3.12.0",
         "@types/node": "^12.6.8",
         "@types/vinyl": "2.0.3",
