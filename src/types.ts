@@ -8,4 +8,7 @@ export type File =
 | vinyl.DirectoryFile
 | vinyl.SymbolicFile;
 
-export type Handler = (file: File, stream: stream.Transform) => void;
+export type Handler = (
+    file: File,
+    stream: stream.Transform,
+) => void | Promise<void>;
