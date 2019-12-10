@@ -7,10 +7,10 @@ export class Serial extends stream.Transform {
         super({
             objectMode: true,
             transform(file: File, _encoding, callback) {
-                Promise.resolve()
-                .then(() => fn(file, this))
-                .then(() => callback())
-                .catch(callback);
+                (async () => {
+                    await fn(file, this);
+                    callback();
+                })().catch(callback);
             },
         });
     }

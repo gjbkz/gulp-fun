@@ -9,15 +9,24 @@ export class Parallel extends stream.Transform {
         super({
             objectMode: true,
             transform(file: File, _encoding, callback) {
-                tasks.push(Promise.resolve(fn(file, this))
-                .catch((error) => {
-                    errors.push(error);
-                }));
+                tasks.push(
+                    (async () => {
+                        await fn(file, this);
+                    })()
+                    .catch((error) => {
+                        errors.push(error);
+                    }),
+                );
                 callback();
             },
             flush(callback) {
                 Promise.all(tasks)
-                .then(() => callback(errors.length === 0 ? null : new Error(errors.join('\n'))))
+                .then(() => {
+                    if (0 < errors.length) {
+                        throw new Error(`CaughtErrors:\n${errors.join('\n')}`);
+                    }
+                    callback();
+                })
                 .catch(callback);
             },
         });

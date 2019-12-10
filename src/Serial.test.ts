@@ -31,3 +31,25 @@ test('load files', async (t) => {
         called,
     );
 });
+
+test('stop at an errored item', async (t) => {
+    const called: Array<string> = [];
+    const output = await new Promise<Array<File>>((resolve, reject) => {
+        vfs.src(
+            path.join(__dirname, '*'),
+            {buffer: false, read: false},
+        )
+        .pipe(serial((file, stream) => {
+            called.push(file.path);
+            if (called.length < 3) {
+                stream.push(file);
+            } else {
+                throw new Error('Foo');
+            }
+        }))
+        .once('end', () => reject(new Error('UnexpectedResolution')))
+        .once('error', resolve);
+    });
+    t.is(called.length, 3);
+    t.true(`${output}`.endsWith('Foo'));
+});
