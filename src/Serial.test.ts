@@ -10,7 +10,7 @@ test('Load files', async (t) => {
     const output = await new Promise<Array<File>>((resolve, reject) => {
         const logger = new Logger<File>(resolve);
         vfs.src(path.join(__dirname, '*'), {buffer: false, read: false})
-        .pipe(serial(async (file, stream) => {
+        .pipe(serial((file, stream) => {
             t.log(`Start: ${file.path}`);
             called.push(file.path);
             stream.push(file);
