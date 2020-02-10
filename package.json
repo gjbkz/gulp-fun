@@ -57,7 +57,6 @@
             "ts-node/register"
         ],
         "files": [
-            "src/**/*.test.ts",
             "lib/**/*.test.js"
         ]
     },
