@@ -19,7 +19,7 @@
     "scripts": {
         "lint": "eslint src/**/*.ts",
         "build": "tsc",
-        "test": "ava -v",
+        "test": "ava",
         "version:changelog": "conventional-changelog --preset angular --infile CHANGELOG.md --same-file --release-count 0",
         "version:add": "git add .",
         "version": "run-s version:changelog version:add",
@@ -49,16 +49,18 @@
         "vinyl-fs": "3.0.3"
     },
     "ava": {
-        "compileEnhancements": false,
         "extensions": [
+            "js",
             "ts"
         ],
         "require": [
             "ts-node/register"
         ],
         "files": [
+            "src/**/*.test.ts",
             "lib/**/*.test.js"
-        ]
+        ],
+        "verbose": true
     },
     "eslintConfig": {
         "extends": "./node_modules/@nlib/lint/.eslintrc.json",
