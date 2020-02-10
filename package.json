@@ -59,8 +59,7 @@
         "files": [
             "src/**/*.test.ts",
             "lib/**/*.test.js"
-        ],
-        "verbose": true
+        ]
     },
     "eslintConfig": {
         "extends": "./node_modules/@nlib/lint/.eslintrc.json",
