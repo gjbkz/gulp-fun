@@ -15,13 +15,6 @@ jobs:
       - run: npm run build
       - run: git diff --exit-code
       - persist_to_workspace: {root: ., paths: [.]}
-  test-8:
-    docker: [{image: "circleci/node:8"}]
-    steps:
-      - attach_workspace: {at: .}
-      - run: sudo npm install -g codecov nyc
-      - run: nyc npm test
-      - run: codecov --disable=gcov
   test-10:
     docker: [{image: "circleci/node:10"}]
     steps:
@@ -65,7 +58,6 @@ workflows:
           filters:
             tags: {ignore: /.*/}
       - build: {requires: [onBranch]}
-      - test-8: {requires: [build]}
       - test-10: {requires: [build]}
       - test-12: {requires: [build]}
       - lint: {requires: [build]}
@@ -77,11 +69,6 @@ workflows:
             tags: {only: /^v.*/}
       - build:
           requires: [isTagged]
-          filters:
-            branches: {ignore: /.*/}
-            tags: {only: /^v.*/}
-      - test-8:
-          requires: [build]
           filters:
             branches: {ignore: /.*/}
             tags: {only: /^v.*/}
@@ -101,7 +88,7 @@ workflows:
             branches: {ignore: /.*/}
             tags: {only: /^v.*/}
       - deploy:
-          requires: [test-8, test-10, test-12, lint]
+          requires: [test-10, test-12, lint]
           filters:
             branches: {ignore: /.*/}
             tags: {only: /^v.*/}
