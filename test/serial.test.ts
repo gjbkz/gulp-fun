@@ -7,7 +7,7 @@ import type {File} from '../src';
 
 const pattern = path.join(__dirname, '*').split(path.sep).join('/');
 
-ava('Load files', async (t) => {
+ava('load files', async (t) => {
     const called: Array<string> = [];
     const output = await new Promise<Array<File>>((resolve, reject) => {
         const logger = new Logger<File>(resolve);

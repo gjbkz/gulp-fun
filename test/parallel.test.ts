@@ -10,8 +10,7 @@ const files = fs.readdirSync(__dirname).map((name) => path.join(__dirname, name)
 const interval = 50;
 const pattern = path.join(__dirname, '*').split(path.sep).join('/');
 
-ava('Load files', async (t) => {
-    t.timeout(files.length * interval * 2);
+ava('load files', async (t) => {
     const called: Array<string> = [];
     const output = await new Promise<Array<File>>((resolve, reject) => {
         const logger = new Logger<File>(resolve);
