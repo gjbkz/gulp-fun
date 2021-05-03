@@ -1,15 +1,17 @@
-import test from 'ava';
+import ava from 'ava';
 import * as path from 'path';
 import * as vfs from 'vinyl-fs';
 import {Logger} from './Logger';
 import {serial} from '../src';
 import type {File} from '../src';
 
-test('Load files', async (t) => {
+const pattern = path.join(__dirname, '*').split(path.sep).join('/');
+
+ava('Load files', async (t) => {
     const called: Array<string> = [];
     const output = await new Promise<Array<File>>((resolve, reject) => {
         const logger = new Logger<File>(resolve);
-        vfs.src(path.join(__dirname, '*'), {buffer: false, read: false})
+        vfs.src(pattern, {buffer: false, read: false})
         .pipe(serial((file, stream) => {
             t.log(`Start: ${file.path}`);
             called.push(file.path);
@@ -22,13 +24,10 @@ test('Load files', async (t) => {
     t.deepEqual(output.map((file) => file.path), called);
 });
 
-test('stop at an errored item', async (t) => {
+ava('stop at an errored item', async (t) => {
     const called: Array<string> = [];
     const output = await new Promise<Array<File>>((resolve, reject) => {
-        vfs.src(
-            path.join(__dirname, '*'),
-            {buffer: false, read: false},
-        )
+        vfs.src(pattern, {buffer: false, read: false})
         .pipe(serial((file, stream) => {
             called.push(file.path);
             if (called.length < 3) {

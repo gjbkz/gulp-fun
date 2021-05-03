@@ -1,4 +1,4 @@
-import test from 'ava';
+import ava from 'ava';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as vfs from 'vinyl-fs';
@@ -8,13 +8,14 @@ import type {File} from '../src';
 
 const files = fs.readdirSync(__dirname).map((name) => path.join(__dirname, name));
 const interval = 50;
+const pattern = path.join(__dirname, '*').split(path.sep).join('/');
 
-test('Load files', async (t) => {
+ava('Load files', async (t) => {
     t.timeout(files.length * interval * 2);
     const called: Array<string> = [];
     const output = await new Promise<Array<File>>((resolve, reject) => {
         const logger = new Logger<File>(resolve);
-        vfs.src(path.join(__dirname, '*'), {buffer: false, read: false})
+        vfs.src(pattern, {buffer: false, read: false})
         .pipe(parallel(async (file, stream) => {
             t.log(`Start: ${file.path}`);
             called.push(file.path);
@@ -31,13 +32,10 @@ test('Load files', async (t) => {
     t.deepEqual(output.map((file) => file.path), called.reverse());
 });
 
-test('report errors', async (t) => {
+ava('report errors', async (t) => {
     const called: Array<string> = [];
     const output = await new Promise<Array<File>>((resolve, reject) => {
-        vfs.src(
-            path.join(__dirname, '*'),
-            {buffer: false, read: false},
-        )
+        vfs.src(pattern, {buffer: false, read: false})
         .pipe(parallel((file) => {
             called.push(file.path);
             throw new Error(file.path);
