@@ -9,7 +9,7 @@
     },
     "license": "Apache-2.0",
     "engines": {
-        "node": ">=10"
+        "node": ">=12"
     },
     "repository": "kei-ito/gulp-fun",
     "main": "lib/index.js",
@@ -17,15 +17,12 @@
         "lib"
     ],
     "scripts": {
-        "lint": "eslint src/**/*.ts",
+        "lint": "eslint src",
         "build": "tsc",
         "test": "ava",
-        "version:changelog": "conventional-changelog --preset angular --infile CHANGELOG.md --same-file --release-count 0",
-        "version:add": "git add .",
         "version": "run-s version:changelog version:add",
-        "prepack:test": "rimraf lib/*.test.*",
-        "prepack:sourcemap": "remove-sourcemap lib",
-        "prepack": "run-s prepack:test prepack:sourcemap"
+        "version:changelog": "nlib-changelog --output CHANGELOG.md",
+        "version:add": "git add ."
     },
     "devDependencies": {
         "@commitlint/cli": "8.3.5",
