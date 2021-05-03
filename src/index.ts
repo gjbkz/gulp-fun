@@ -2,18 +2,17 @@ import {Transform} from 'stream';
 import type {BufferFile, DirectoryFile, NullFile, StreamFile, SymbolicFile} from 'vinyl';
 
 export type File = BufferFile | DirectoryFile | NullFile | StreamFile | SymbolicFile;
-export interface FileHandler {
-    (file: File, stream: Transform): Promise<void> | void,
+export interface Handler<Type> {
+    (data: Type, stream: Transform): Promise<void> | void,
 }
-
-export const parallel = (handler: FileHandler) => {
+export const parallel = <Type = File>(handler: Handler<Type>) => {
     const tasks: Array<Promise<void>> = [];
     const errors: Array<Error> = [];
     return new Transform({
         objectMode: true,
-        transform(file: File, _encoding, callback) {
+        transform(data: Type, _encoding, callback) {
             tasks.push(
-                (async () => await handler(file, this))()
+                (async () => await handler(data, this))()
                 .catch((error) => {
                     errors.push(error);
                 }),
@@ -32,11 +31,10 @@ export const parallel = (handler: FileHandler) => {
         },
     });
 };
-
-export const serial = (handler: FileHandler) => new Transform({
+export const serial = <Type = File>(handler: Handler<Type>) => new Transform({
     objectMode: true,
-    transform(file: File, _encoding, callback) {
-        (async () => await handler(file, this))()
+    transform(data: Type, _encoding, callback) {
+        (async () => await handler(data, this))()
         .then(() => callback())
         .catch(callback);
     },
