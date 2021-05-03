@@ -1,15 +1,13 @@
 import * as stream from 'stream';
 
-export class Logger<TType> extends stream.Writable {
+export class Logger<Type> extends stream.Writable {
 
-    protected received: Array<TType>;
+    protected received: Array<Type>;
 
-    public constructor(
-        cb: (result: Array<TType>) => void,
-    ) {
+    public constructor(cb: (result: Array<Type>) => void) {
         super({
             objectMode: true,
-            write: (item: TType, _encoding, callback) => {
+            write: (item: Type, _encoding, callback) => {
                 this.received.push(item);
                 callback();
             },
@@ -21,7 +19,7 @@ export class Logger<TType> extends stream.Writable {
         this.received = [];
     }
 
-    public output(): Array<TType> {
+    public output(): Array<Type> {
         return this.received.slice();
     }
 

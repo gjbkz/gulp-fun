@@ -2,9 +2,9 @@ import test from 'ava';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as vfs from 'vinyl-fs';
-import {parallel} from './Parallel';
-import {File} from './types';
 import {Logger} from './Logger';
+import {parallel} from '../src';
+import type {File} from '../src';
 
 const files = fs.readdirSync(__dirname).map((name) => path.join(__dirname, name));
 const interval = 50;
@@ -19,7 +19,9 @@ test('Load files', async (t) => {
             t.log(`Start: ${file.path}`);
             called.push(file.path);
             const duration = interval * (files.length - files.indexOf(file.path));
-            await new Promise((resolve) => setTimeout(resolve, duration));
+            await new Promise((res) => {
+                setTimeout(res, duration);
+            });
             stream.push(file);
             t.log(`Done: ${file.path}`);
         }))

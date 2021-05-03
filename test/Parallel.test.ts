@@ -1,45 +1,49 @@
 import test from 'ava';
 import * as path from 'path';
+import * as fs from 'fs';
 import * as vfs from 'vinyl-fs';
-import {serial} from './Serial';
-import {File} from './types';
+import {parallel} from '../src';
+import type {File} from '../src';
 import {Logger} from './Logger';
 
+const files = fs.readdirSync(__dirname).map((name) => path.join(__dirname, name));
+const interval = 50;
+
 test('Load files', async (t) => {
+    t.timeout(files.length * interval * 2);
     const called: Array<string> = [];
     const output = await new Promise<Array<File>>((resolve, reject) => {
         const logger = new Logger<File>(resolve);
         vfs.src(path.join(__dirname, '*'), {buffer: false, read: false})
-        .pipe(serial((file, stream) => {
+        .pipe(parallel(async (file, stream) => {
             t.log(`Start: ${file.path}`);
             called.push(file.path);
+            const duration = interval * (files.length - files.indexOf(file.path));
+            await new Promise((res) => {
+                setTimeout(res, duration);
+            });
             stream.push(file);
             t.log(`Done: ${file.path}`);
         }))
         .pipe(logger)
         .once('error', reject);
     });
-    t.deepEqual(output.map((file) => file.path), called);
+    t.deepEqual(output.map((file) => file.path), called.reverse());
 });
 
-test('stop at an errored item', async (t) => {
+test('report errors', async (t) => {
     const called: Array<string> = [];
     const output = await new Promise<Array<File>>((resolve, reject) => {
         vfs.src(
             path.join(__dirname, '*'),
             {buffer: false, read: false},
         )
-        .pipe(serial((file, stream) => {
+        .pipe(parallel((file) => {
             called.push(file.path);
-            if (called.length < 3) {
-                stream.push(file);
-            } else {
-                throw new Error('Foo');
-            }
+            throw new Error(file.path);
         }))
         .once('end', () => reject(new Error('UnexpectedResolution')))
         .once('error', resolve);
     });
-    t.is(called.length, 3);
-    t.true(`${output}`.endsWith('Foo'));
+    t.true(`${output}`.trim().split('\n').slice(1).every((line, index) => line.endsWith(called[index])));
 });

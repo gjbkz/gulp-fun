@@ -18,11 +18,19 @@
     ],
     "scripts": {
         "lint": "eslint src",
-        "build": "tsc",
+        "build": "tsc --project tsconfig.build.json",
         "test": "ava",
         "version": "run-s version:changelog version:add",
         "version:changelog": "nlib-changelog --output CHANGELOG.md",
         "version:add": "git add ."
+    },
+    "peerDependencies": {
+        "@types/vinyl": "2.0.4"
+    },
+    "peerDependenciesMeta": {
+        "@types/vinyl": {
+            "optional": true
+        }
     },
     "devDependencies": {
         "@nlib/changelog": "0.1.9",
@@ -30,7 +38,6 @@
         "@nlib/githooks": "0.0.5",
         "@nlib/lint-commit": "0.1.4",
         "@types/node": "15.0.1",
-        "@types/vinyl": "2.0.4",
         "@types/vinyl-fs": "2.4.11",
         "@typescript-eslint/eslint-plugin": "4.22.0",
         "@typescript-eslint/parser": "4.22.0",
