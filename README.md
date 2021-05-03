@@ -40,23 +40,23 @@ gulp.src('src/*.js')
 import {Transform} from 'stream';
 import type {BufferFile, DirectoryFile, NullFile, StreamFile, SymbolicFile} from 'vinyl';
 export type File = BufferFile | DirectoryFile | NullFile | StreamFile | SymbolicFile;
-export interface FileHandler {
-  (file: File, stream: Transform): Promise<void> | void;
+export interface Handler<Type> {
+    (data: Type, stream: Transform): Promise<void> | void,
 }
-export const parallel: (handler: FileHandler) => Transform;
-export const serial: (handler: FileHandler) => Transform;
+export const parallel: <Type = File>(handler: Handler<Type>) => Transform;
+export const serial: <Type = File>(handler: Handler<Type>) => Transform;
 ```
 
 ## serial or parallel
 
 ```typescript
 import {PassThrough} from 'stream';
-import type {FileHandler} from 'gulp-fun';
+import type {Handler} from 'gulp-fun';
 const wait = async (t: number) => await new Promise((resolve) => setTimeout(resolve, t));
-const handler: FileHandler = async (file, stream) => {
-  stream.push(`${file}-1`);
+const handler: Handler<string> = async (data, stream) => {
+  stream.push(`${data}-1`);
   await wait(100);
-  stream.push(`${file}-2`);
+  stream.push(`${data}-2`);
 };
 const source = new PassThrough();
 setImmediate(() => {
