@@ -1,8 +1,8 @@
 import test from 'ava';
 import * as path from 'path';
 import * as vfs from 'vinyl-fs';
-import {serial} from './Serial';
-import {File} from './types';
+import {serial} from '../src';
+import type {File} from '../src';
 import {Logger} from './Logger';
 
 test('Load files', async (t) => {
