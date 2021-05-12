@@ -40,7 +40,7 @@
         "@types/node": "15.0.2",
         "@types/vinyl-fs": "2.4.11",
         "@typescript-eslint/eslint-plugin": "4.22.1",
-        "@typescript-eslint/parser": "4.22.0",
+        "@typescript-eslint/parser": "4.23.0",
         "ava": "3.15.0",
         "eslint": "7.26.0",
         "lint-staged": "11.0.0",
