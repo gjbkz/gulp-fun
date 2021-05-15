@@ -7,13 +7,13 @@ export interface Handler<Type> {
 }
 export const parallel = <Type = File>(handler: Handler<Type>) => {
     const tasks: Array<Promise<void>> = [];
-    const errors: Array<Error> = [];
+    const errors: Array<unknown> = [];
     return new Transform({
         objectMode: true,
         transform(data: Type, _encoding, callback) {
             tasks.push(
                 (async () => await handler(data, this))()
-                .catch((error) => {
+                .catch((error: unknown) => {
                     errors.push(error);
                 }),
             );
