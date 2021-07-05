@@ -25,7 +25,7 @@
         "version:add": "git add ."
     },
     "peerDependencies": {
-        "@types/vinyl": "2.0.4"
+        "@types/vinyl": "2.0.5"
     },
     "peerDependenciesMeta": {
         "@types/vinyl": {
