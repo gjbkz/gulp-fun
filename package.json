@@ -21,7 +21,7 @@
         "build": "tsc --project tsconfig.build.json",
         "test": "ava",
         "version": "run-s version:changelog version:add",
-        "version:changelog": "nlib-changelog --output CHANGELOG.md",
+        "version:changelog": "npx @nlib/changelog --output CHANGELOG.md",
         "version:add": "git add ."
     },
     "peerDependencies": {
@@ -33,10 +33,8 @@
         }
     },
     "devDependencies": {
-        "@nlib/changelog": "0.1.10",
         "@nlib/eslint-config": "3.17.24",
         "@nlib/githooks": "0.0.5",
-        "@nlib/lint-commit": "0.1.4",
         "@types/node": "16.7.10",
         "@types/vinyl-fs": "2.4.12",
         "@typescript-eslint/eslint-plugin": "4.30.0",

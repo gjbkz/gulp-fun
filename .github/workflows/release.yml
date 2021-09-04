@@ -12,7 +12,9 @@ jobs:
           node-version: 16.x
           cache: npm
           registry-url: https://registry.npmjs.org
-      - run: npx cleanup-package-json --file package.json
+      - run: npm ci
+      - run: npm run build
+      - run: npx @nlib/cleanup-package-json --file package.json
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
