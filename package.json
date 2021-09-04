@@ -33,11 +33,11 @@
         }
     },
     "devDependencies": {
-        "@nlib/changelog": "0.1.9",
+        "@nlib/changelog": "0.1.10",
         "@nlib/eslint-config": "3.17.24",
         "@nlib/githooks": "0.0.5",
         "@nlib/lint-commit": "0.1.4",
-        "@types/node": "15.14.9",
+        "@types/node": "16.7.10",
         "@types/vinyl-fs": "2.4.12",
         "@typescript-eslint/eslint-plugin": "4.30.0",
         "@typescript-eslint/parser": "4.30.0",
@@ -48,7 +48,7 @@
         "rimraf": "^3.0.2",
         "ts-node": "10.2.1",
         "typescript": "4.4.2",
-        "vinyl-fs": "3.0.3"
+        "vinyl-fs": "^2.4.1"
     },
     "lint-staged": {
         "*.js": [
@@ -57,14 +57,7 @@
     },
     "renovate": {
         "extends": [
-            ":ignoreModulesAndTests",
-            ":unpublishSafe",
-            ":semanticPrefixChore",
-            ":prNotPending",
-            ":prConcurrentLimit10",
-            ":prHourlyLimitNone",
-            ":label(dependencies)",
-            ":automergeMinor"
+            "github>nlibjs/renovate-config"
         ]
     }
 }
