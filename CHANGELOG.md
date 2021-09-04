@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.1.4 (2021-09-04)
+
+### Continuous Integration
+
+- fix release script ([415338b](https://github.com/kei-ito/gulp-fun/commit/415338b4e3da1c22f53c6860d3761c56869505f9))
+
+
 ## v1.1.3 (2021-09-04)
 
 ### Documentation
