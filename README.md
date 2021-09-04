@@ -1,6 +1,6 @@
 # gulp-fun
 
-[![Test](https://github.com/kei-ito/gulp-fun/actions/workflows/workflow.yml/badge.svg)](https://github.com/kei-ito/gulp-fun/actions/workflows/workflow.yml)
+[![Test](https://github.com/kei-ito/gulp-fun/actions/workflows/test.yml/badge.svg)](https://github.com/kei-ito/gulp-fun/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/kei-ito/gulp-fun/branch/master/graph/badge.svg)](https://codecov.io/gh/kei-ito/gulp-fun)
 
 A helper for developers who like [gulp](https://www.npmjs.com/package/gulp) but want/need to write transformations without plugins.
