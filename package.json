@@ -35,7 +35,7 @@
     "devDependencies": {
         "@nlib/eslint-config": "3.17.25",
         "@nlib/githooks": "0.1.0",
-        "@types/node": "16.9.1",
+        "@types/node": "16.9.6",
         "@types/vinyl-fs": "2.4.12",
         "@typescript-eslint/eslint-plugin": "4.31.2",
         "@typescript-eslint/parser": "4.31.2",
