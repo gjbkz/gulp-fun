@@ -33,7 +33,7 @@
         }
     },
     "devDependencies": {
-        "@nlib/eslint-config": "3.17.25",
+        "@nlib/eslint-config": "3.17.28",
         "@nlib/githooks": "0.1.0",
         "@types/node": "16.11.1",
         "@types/vinyl-fs": "2.4.12",
