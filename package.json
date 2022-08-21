@@ -49,13 +49,7 @@
         "vinyl-fs": "3.0.3"
     },
     "eslintConfig": {
-        "extends": [
-            "@nlib/eslint-config"
-        ],
-        "env": {
-            "es6": true,
-            "node": true
-        },
+        "extends": "@nlib/eslint-config",
         "rules": {
             "@nlib/no-globals": "off"
         }
@@ -73,9 +67,7 @@
         ]
     },
     "lint-staged": {
-        "*.js": [
-            "eslint"
-        ]
+        "*!(.d).{ts,tsx,js,mjs,cjs,jsx}": "eslint"
     },
     "renovate": {
         "extends": [
