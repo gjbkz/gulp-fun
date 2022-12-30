@@ -38,7 +38,7 @@
         "@types/node": "18.11.18",
         "@types/vinyl-fs": "2.4.12",
         "@typescript-eslint/eslint-plugin": "5.47.1",
-        "@typescript-eslint/parser": "5.47.0",
+        "@typescript-eslint/parser": "5.47.1",
         "ava": "4.3.3",
         "eslint": "8.30.0",
         "lint-staged": "13.1.0",
