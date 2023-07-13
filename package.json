@@ -37,7 +37,7 @@
         "@nlib/githooks": "0.1.0",
         "@types/node": "18.11.18",
         "@types/vinyl-fs": "2.4.12",
-        "@typescript-eslint/eslint-plugin": "5.48.0",
+        "@typescript-eslint/eslint-plugin": "5.62.0",
         "@typescript-eslint/parser": "5.48.0",
         "ava": "5.1.0",
         "eslint": "8.31.0",
