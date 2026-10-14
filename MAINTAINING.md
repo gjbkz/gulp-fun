@@ -27,12 +27,9 @@ real Vinyl input and output; optional Vinyl types support TypeScript consumers.
 
 ## Validation and release
 
-1. Install from the committed lockfile with `npm ci`.
-2. Run `npm test` and confirm the GitHub Actions matrix passes.
-3. Inspect `npm pack --dry-run` for the compiled JavaScript and declarations.
-4. Update CHANGELOG.md and the package version together before publishing.
-5. Publish only after maintainer approval. The release workflow checks that the
-   release tag matches the package version and runs the tests.
+Validate with `npm ci`, `npm run lint`, `npm test`, and `npm pack --dry-run`.
+Follow the shared [release and recovery procedure](https://github.com/nlibjs/actions#release-procedure).
+Package-specific Trusted Publisher settings are in `.github/workflows/release.yml`.
 
 The pending Node.js minimum and parallel error-policy changes require a major
 release. package.json stages version 2.0.0; the changes remain unreleased until
