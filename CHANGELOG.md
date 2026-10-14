@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased (next major)
+
+- Require Node.js 22 or newer; test Node.js 22, 24, and 26 and Gulp 5.
+- Add an optional concurrency limit to parallel; retain Infinity as the default.
+- Report parallel errors immediately and preserve the original Error instead of
+  collecting failures in a CaughtErrors string. Wrap non-Error failures in both modes.
+- Stop retaining completed handler promises and skip queued work after destruction.
+- Replace the legacy test/lint tooling with TypeScript and Node's built-in tests.
+- Correct Vinyl contents examples and document maintenance-only support.
+- Disable routine Renovate development-dependency updates and automerge.
+- Validate the package version and tests before publishing a release.
+
 ## v1.1.4 (2021-09-04)
 
 ### Continuous Integration

@@ -1,82 +1,112 @@
 # gulp-fun
 
-[![Test](https://github.com/kei-ito/gulp-fun/actions/workflows/test.yml/badge.svg)](https://github.com/kei-ito/gulp-fun/actions/workflows/test.yml)
-[![codecov](https://codecov.io/gh/kei-ito/gulp-fun/branch/master/graph/badge.svg)](https://codecov.io/gh/kei-ito/gulp-fun)
+[![Test](https://github.com/gjbkz/gulp-fun/actions/workflows/test.yml/badge.svg)](https://github.com/gjbkz/gulp-fun/actions/workflows/test.yml)
 
-A helper for developers who like [gulp](https://www.npmjs.com/package/gulp) but want/need to write transformations without plugins.
+Create object-mode transform streams from synchronous or asynchronous functions.
+Use them in Gulp pipelines without writing a dedicated plugin.
+
+## Maintenance status
+
+This project is in maintenance mode. Bug fixes, security fixes, and changes
+needed for supported Node.js and Gulp compatibility are in scope. New features,
+new integrations, and performance work without a demonstrated problem are not
+planned. Responses and releases are best effort; there is no support SLA.
+
+Development and the next release require Node.js 22 or newer. CI covers Node.js
+22, 24, and 26, with Gulp 5 integration tests. Older npm releases retain their
+original requirements. See [MAINTAINING.md](./MAINTAINING.md) for the upkeep policy.
 
 ## Install
 
-```
-npm install gulp-fun --save-dev
+```sh
+npm install --save-dev gulp-fun
 ```
 
 ## Usage
 
+Use Vinyl's `contents` property and push each output explicitly. Returning a
+value from the handler does not emit it. Skip a file by not pushing it; emit
+multiple outputs by pushing more than once.
+
 ```javascript
 const gulp = require('gulp');
+const {pipeline} = require('node:stream/promises');
 const {serial} = require('gulp-fun');
-const {rollup} = require('rollup');
-const UglifyJS = require('uglify-js');
 
-gulp.src('src/*.js')
-.pipe(serial(async (file, stream) => {
-  // async middleware
-  const bundle = await rollup({input: file.path});
-  ({code: file.content} = await bundle.generate({format: 'es'}));
-  stream.push(file);
-}))
-.pipe(serial((file, stream) => {
-  // sync middleware
-  file.content = UglifyJS.minify(file.content);
-  stream.push(file);
-}))
-.pipe(gulp.dest('dest'));
+exports.uppercase = function uppercase() {
+    return pipeline(
+        gulp.src('src/*.txt'),
+        serial((file, stream) => {
+            if (file.isBuffer()) {
+                file.contents = Buffer.from(file.contents.toString('utf8').toUpperCase());
+            }
+            stream.push(file);
+        }),
+        gulp.dest('dest'),
+    );
+};
 ```
 
-## Javascript API
+Use `pipeline` to propagate errors and destroy the connected streams.
+
+## API
 
 ```typescript
-import {Transform} from 'stream';
+import {Transform} from 'node:stream';
 import type {BufferFile, DirectoryFile, NullFile, StreamFile, SymbolicFile} from 'vinyl';
+
 export type File = BufferFile | DirectoryFile | NullFile | StreamFile | SymbolicFile;
 export interface Handler<Type> {
-    (data: Type, stream: Transform): Promise<void> | void,
+    (data: Type, stream: Transform): Promise<void> | void;
 }
-export const parallel: <Type = File>(handler: Handler<Type>) => Transform;
+export interface ParallelOptions {
+    concurrency?: number;
+}
 export const serial: <Type = File>(handler: Handler<Type>) => Transform;
+export const parallel: <Type = File>(handler: Handler<Type>, options?: ParallelOptions) => Transform;
 ```
 
-## serial or parallel
+`serial` awaits each handler before starting the next input. `parallel` emits
+outputs in handler completion order; it does not preserve input order.
 
-```typescript
-import {PassThrough} from 'stream';
-import type {Handler} from 'gulp-fun';
-const wait = async (t: number) => await new Promise((resolve) => setTimeout(resolve, t));
-const handler: Handler<string> = async (data, stream) => {
-  stream.push(`${data}-1`);
-  await wait(100);
-  stream.push(`${data}-2`);
-};
-const source = new PassThrough();
-setImmediate(() => {
-  source.write('foo');
-  source.write('bar');
-});
-source.pipe(serial(handler)).on('data', console.log);
-// foo-1 → foo-2 → bar-1 → bar-2
-source.pipe(parallel(handler)).on('data', console.log);
-// foo-1 → bar-1 → foo-2 → bar-2
+### Bounded parallel processing (next release)
+
+```javascript
+const {parallel} = require('gulp-fun');
+
+const transform = parallel(async (file, stream) => {
+    // Await all work before resolving the handler.
+    await processFile(file);
+    stream.push(file);
+}, {concurrency: 4});
 ```
 
-In serial mode, transform function is called serially.
-If the function is an async function,
-the next call is after the previous call is resolved.
+`concurrency` must be a positive safe integer or `Infinity`. It limits active
+handlers by holding the transform callback until a slot is available. For
+backward compatibility the default is `Infinity`; specify a finite limit for
+large inputs or external services. Handlers that emit many outputs must also
+respect readable-side backpressure themselves.
 
-In parallel mode, transform function is called when new data is available.
-Even if the function is an async function,
-the next call doesn't wait the previous call is resolved.
+### Errors and cancellation (next release)
 
-## LICENSE
+Both modes report the first handler failure immediately, retaining the original
+`Error`. Non-Error thrown values are wrapped in an `Error`. Parallel failures
+are no longer delayed until all tasks finish or collected as a `CaughtErrors`
+string. Already-running handlers cannot be automatically cancelled: they should
+manage their own resources and cancellation, and avoid pushing after destruction.
+A handler that never settles still prevents successful completion if no error
+occurs. Async work must be returned or awaited by the handler.
 
-The gulp-fun project is licensed under the terms of the Apache 2.0 License.
+## Development
+
+```sh
+npm ci
+npm test
+npm pack --dry-run
+```
+
+Tests use Node's built-in runner and the compiled CommonJS entry point.
+
+## License
+
+Apache-2.0.
