@@ -1,31 +1,29 @@
 {
     "name": "gulp-fun",
-    "version": "1.1.4",
+    "version": "2.0.0",
     "description": "Create a transform stream from sync/async function.",
     "author": {
         "name": "Kei Ito",
         "email": "kei.itof@gmail.com",
-        "url": "https://github.com/kei-ito"
+        "url": "https://github.com/gjbkz"
     },
     "license": "Apache-2.0",
     "engines": {
-        "node": ">=12"
+        "node": ">=22"
     },
-    "repository": "kei-ito/gulp-fun",
+    "repository": "github:gjbkz/gulp-fun",
     "main": "lib/index.js",
+    "types": "lib/index.d.ts",
     "files": [
         "lib"
     ],
     "scripts": {
-        "lint": "eslint src",
-        "build": "tsc --project tsconfig.build.json",
-        "test": "ava",
-        "version": "run-s version:changelog version:add",
-        "version:changelog": "npx @nlib/changelog --output CHANGELOG.md",
-        "version:add": "git add ."
+        "build": "node -e \"require('node:fs').rmSync('lib', {recursive: true, force: true})\" && tsc --project tsconfig.build.json",
+        "test": "npm run build && node --test test/*.test.cjs",
+        "prepack": "npm run build"
     },
     "peerDependencies": {
-        "@types/vinyl": "2.0.7"
+        "@types/vinyl": "^2.0.7"
     },
     "peerDependenciesMeta": {
         "@types/vinyl": {
@@ -33,45 +31,24 @@
         }
     },
     "devDependencies": {
-        "@nlib/eslint-config": "3.19.6",
-        "@nlib/githooks": "0.1.0",
-        "@types/node": "18.11.18",
-        "@types/vinyl-fs": "2.4.12",
-        "@typescript-eslint/eslint-plugin": "5.48.0",
-        "@typescript-eslint/parser": "5.48.0",
-        "ava": "5.1.0",
-        "eslint": "8.31.0",
-        "lint-staged": "13.1.0",
-        "npm-run-all": "4.1.5",
-        "rimraf": "3.0.2",
-        "ts-node": "10.9.1",
-        "typescript": "4.9.4",
-        "vinyl-fs": "3.0.3"
-    },
-    "eslintConfig": {
-        "extends": "@nlib/eslint-config",
-        "rules": {
-            "@nlib/no-globals": "off"
-        }
-    },
-    "ava": {
-        "extensions": [
-            "js",
-            "ts"
-        ],
-        "require": [
-            "ts-node/register"
-        ],
-        "files": [
-            "test/**/*.test.ts"
-        ]
-    },
-    "lint-staged": {
-        "*!(.d).{ts,tsx,js,mjs,cjs,jsx}": "eslint"
+        "@types/node": "22.20.5",
+        "@types/vinyl": "2.0.12",
+        "gulp": "5.0.1",
+        "typescript": "7.0.2"
     },
     "renovate": {
         "extends": [
-            "github>nlibjs/renovate-config"
+            "config:recommended"
+        ],
+        "dependencyDashboard": false,
+        "automerge": false,
+        "packageRules": [
+            {
+                "matchDepTypes": [
+                    "devDependencies"
+                ],
+                "enabled": false
+            }
         ]
     }
 }
