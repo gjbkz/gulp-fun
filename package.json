@@ -11,13 +11,14 @@
     "engines": {
         "node": ">=22"
     },
-    "repository": "github:gjbkz/gulp-fun",
+    "repository": "https://github.com/gjbkz/gulp-fun",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
     "files": [
         "lib"
     ],
     "scripts": {
+        "lint": "tsc --project tsconfig.build.json --noEmit",
         "build": "node -e \"require('node:fs').rmSync('lib', {recursive: true, force: true})\" && tsc --project tsconfig.build.json",
         "test": "npm run build && node --test test/*.test.cjs",
         "prepack": "npm run build"
