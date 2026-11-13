@@ -22,6 +22,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run lint
+      - run: npx tsc --noEmit
   Test:
     name: Test (${{ matrix.os }}, ${{ matrix.node }})
     permissions:
