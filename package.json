@@ -64,5 +64,11 @@
         "extends": [
             "github>nlibjs/renovate-config"
         ]
+    },
+    "overrides": {
+        "lint-staged": {
+            "micromatch": "4.0.8",
+            "yaml": "2.9.1"
+        }
     }
 }
