@@ -17,7 +17,7 @@
         "lib"
     ],
     "scripts": {
-        "lint": "eslint src",
+        "lint": "biome lint src test",
         "build": "tsc --project tsconfig.build.json",
         "test": "ava",
         "version": "run-s version:changelog version:add",
@@ -33,26 +33,17 @@
         }
     },
     "devDependencies": {
-        "@nlib/eslint-config": "3.20.5",
+        "@biomejs/biome": "2.6.7",
         "@nlib/githooks": "0.2.2",
         "@types/node": "18.19.130",
-        "@types/vinyl-fs": "2.4.12",
-        "@typescript-eslint/eslint-plugin": "5.62.0",
-        "@typescript-eslint/parser": "5.62.0",
+        "@types/vinyl-fs": "3.0.8",
         "ava": "5.3.1",
-        "eslint": "8.57.1",
         "lint-staged": "13.3.0",
         "npm-run-all": "4.1.5",
         "rimraf": "3.0.2",
         "ts-node": "10.9.2",
         "typescript": "4.9.5",
         "vinyl-fs": "3.0.3"
-    },
-    "eslintConfig": {
-        "extends": "@nlib/eslint-config",
-        "rules": {
-            "@nlib/no-globals": "off"
-        }
     },
     "ava": {
         "extensions": [
@@ -67,7 +58,7 @@
         ]
     },
     "lint-staged": {
-        "*!(.d).{ts,tsx,js,mjs,cjs,jsx}": "eslint"
+        "*!(.d).{ts,tsx,js,mjs,cjs,jsx}": "biome lint --no-errors-on-unmatched"
     },
     "renovate": {
         "extends": [
